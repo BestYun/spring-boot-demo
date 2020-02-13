@@ -1,7 +1,7 @@
 # spring-boot-demo
 
 ## spring-boot-web
-. 创建控制器
+. 创建控制器<br>
 1)方式一
 ```
 @Controller
@@ -26,13 +26,13 @@ public class Controller2 {
 }
 ```
 
-@RestController 是@Controller和@ResponseBody简写
-@GetMapping 是@RequestMapping(value = "/v1",method = RequestMethod.GET)简写
+@RestController 是@Controller和@ResponseBody简写<br>
+@GetMapping 是@RequestMapping(value = "/v1",method = RequestMethod.GET)简写<br>
 
 3)方式三
-http://127.0.0.1:8888/route/v3
-http://127.0.0.1:8888/route/v4
-上面两个url公共路径route可以统一使用@RequestMapping("/route")简化
+http://127.0.0.1:8888/route/v3<br>
+http://127.0.0.1:8888/route/v4<br>
+上面两个url公共路径route可以统一使用@RequestMapping("/route")简化<br>
 
 ```
 @RestController
@@ -53,9 +53,9 @@ public class Controller3 {
 ```
 
 
-路由get post
-get请求@GetMapping("/route/get")
-post请求@PostMapping("route/post")
+路由get post<br>
+get请求@GetMapping("/route/get")<br>
+post请求@PostMapping("route/post")<br>
 
 获取request
 ```

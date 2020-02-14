@@ -152,7 +152,7 @@ server.port = 8888
 </dependency>
 ```
 
-## 参数校验以及Json返回
+## 参数校验以及Json返回[spring-boot-validate](https://github.com/BestYun/spring-boot-demo/tree/master/spring-boot-validate])
 
 参数验证
 0)配置hibernate Validator为快速失败返回模式,只要有一个错误立即结束校验

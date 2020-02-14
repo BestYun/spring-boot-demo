@@ -15,6 +15,9 @@ public class JsonResult {
     public static JsonResult success(int errCode, String msg, Object data){
         return new JsonResult(errCode,msg,data);
     }
+    public static JsonResult success(Object data){
+        return new JsonResult(0,"ok",data);
+    }
     public static JsonResult success(int errCode, Object data){
         return new JsonResult(errCode,"ok",data);
     }

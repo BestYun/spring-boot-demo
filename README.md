@@ -155,7 +155,182 @@ server.port = 8888
 ## 参数校验以及Json返回
 
 参数验证
-1）
+0)配置hibernate Validator为快速失败返回模式,只要有一个错误立即结束校验
+```
+import org.springframework.context.annotation.Configuration;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+//
+@Configuration
+public class ValidateConfig {
+    @Bean
+    public Validator validator(){
+        ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
+                .configure()
+                .addProperty( "hibernate.validator.fail_fast", "true" )
+                .buildValidatorFactory();
+        Validator validator = validatorFactory.getValidator();
+
+        return validator;
+    }
+}
+```
+
+
+
+
+1）封装成类处理@Valid User user,BindingResult bindingResult
+```
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.*;
+
+public class User {
+
+    @NotBlank(message = "name不能为空")
+    @Length(min = 6,message = "name长度不能小于6")
+    private String name;
+
+    @NotNull(message = "age不能为空")
+    @Max(value = 200,message = "age不能大于200")
+    @Min(value = 0,message = "age不能小于0")
+    private Integer age;
+    //get set ...
+}
+
+@PostMapping("/user2")
+    JsonResult createUser2(
+            @Valid User user,
+            BindingResult bindingResult
+    ){
+        if (bindingResult.hasErrors()){
+
+            return JsonResult.fail(1,bindingResult.getFieldError().getDefaultMessage());
+        }
+
+        return JsonResult.success(0,user);
+    }
+```
+
+2）直接在方法参数校验
+```
+
+import com.readchen.springbootvalidate.vo.JsonResult;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import javax.validation.constraints.NotBlank;
+
+
+@RestController
+//在请求方法中校验需要在类上加该注解
+@Validated
+public class UserController2 {
+
+
+    @PostMapping("/user3")
+//    只能通过全局异常捕获参数校验错误信息
+    JsonResult createUser(
+            @NotBlank(message = "用户名不能为空")
+            @Length(min = 6,message = "用户名不能小于6")
+                    String name){
+
+        return JsonResult.success(0,name);
+    }
+
+}
+
+```
+
+3）统一处理错误异常
+```
+package com.readchen.springbootvalidate;
+
+import com.readchen.springbootvalidate.vo.JsonResult;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.validation.ConstraintViolationException;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+
+    /**
+     * 处理application/json这种请求头
+     *
+     * @PostMapping("/user4")
+     *     JsonResult createUser(@RequestBody @Validated User user){
+     *
+     *         return JsonResult.success(0, user);
+     *     }
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public JsonResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        String msg = e.getBindingResult().getFieldError().getDefaultMessage();
+
+        return JsonResult.fail(1, msg);
+    }
+
+
+    /**
+     * 处理请求方法里面的参数校验异常
+     *  @PostMapping("/user3")// 只能通过全局异常捕获参数校验错误信息
+     *     JsonResult createUser(
+     *             @NotBlank(message = "用户名不能为空")
+     *             @Length(min = 6,message = "用户名不能小于6")
+     *                     String name){
+     *
+     *         return JsonResult.success(0,name);
+     *     }
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public JsonResult handleValidate(ConstraintViolationException e) {
+        //获取异常中第一个错误信息
+        String message = e.getConstraintViolations().iterator().next().getMessage();
+
+        return JsonResult.fail(1000, message);
+    }
+
+
+    /**
+     * 绑定类处理校验异常
+     * 处理@Validated User user 参数校验抛出的异常
+     *
+     * @PostMapping("/user")//放在统一异常处理
+     * JsonResult createUser(@Validated User user){
+     * return JsonResult.success(0,user);
+     * }
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BindException.class)
+    public JsonResult bindExceptionHandler(BindException e) {
+        //获取异常中随机一个异常信息
+        String defaultMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+        return JsonResult.fail(1, defaultMessage);
+    }
+
+    @ExceptionHandler(value = Exception.class)
+//    其他异常
+    public JsonResult handleException(Exception ex) {
+
+
+        return JsonResult.fail(2, ex.toString());
+    }
+
+
+}
+
+```
 
 
 返回json格式,springboot默认使用jackjson

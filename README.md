@@ -155,6 +155,7 @@ server.port = 8888
 ## 参数校验以及Json返回
 
 参数验证
+1）
 
 
 返回json格式,springboot默认使用jackjson
@@ -182,7 +183,7 @@ jpa
 
 mybatis
 
-mybatis-plugins
+mybatis-plus
 
 连接池
 

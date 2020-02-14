@@ -121,6 +121,39 @@ http://127.0.0.1:8081/hello?name=yun 获取name的值
 ```
 
 
+@RequestBody接收Content-Type :application/json类型的数据
+
+```
+@PostMapping("/param/user/add")
+ResultJson createUser(@RequestBody User user){
+
+    return new ResultJson(0,"create ok",user);
+}
+
+```
+
+
+
+配置文件属性
+```
+#端口
+server.port = 8888
+```
+
+
+
+热加载<br>
+在pom.xml添加以下依赖，然后在idea->preferences->Build,Excution,Deployment->Compiler->Build Project automatically 勾选
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
+## 参数校验以及Json返回
+
 参数验证
 
 
@@ -139,34 +172,6 @@ public class ParamPostController {
 }
 ```
 
-
-
-@RequestBody接收Content-Type :application/json类型的数据
-
-```
-@PostMapping("/param/user/add")
-ResultJson createUser(@RequestBody User user){
-
-    return new ResultJson(0,"create ok",user);
-}
-
-```
-
-
-
-配置文件属性
-
-
-
-热加载<br>
-在pom.xml添加以下依赖，然后在idea->preferences->Build,Excution,Deployment->Compiler->Build Project automatically 勾选
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-devtools</artifactId>
-    <optional>true</optional>
-</dependency>
-```
 
 
 

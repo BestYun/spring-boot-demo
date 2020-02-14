@@ -141,9 +141,16 @@ public class ParamPostController {
 
 
 
-请求参数是json
+@RequestBody接收Content-Type :application/json类型的数据
 
+```
+@PostMapping("/param/user/add")
+ResultJson createUser(@RequestBody User user){
 
+    return new ResultJson(0,"create ok",user);
+}
+
+```
 
 
 
@@ -151,7 +158,16 @@ public class ParamPostController {
 
 
 
-热加载
+热加载<br>
+在pom.xml添加以下依赖，然后在idea->preferences->Build,Excution,Deployment->Compiler->Build Project automatically 勾选
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
 
 
 ## 数据库

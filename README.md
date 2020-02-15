@@ -331,8 +331,6 @@ public class GlobalExceptionHandler {
 }
 
 ```
-
-
 返回json格式,springboot默认使用jackjson
 ```
 @RestController
@@ -352,9 +350,38 @@ public class ParamPostController {
 
 
 ## 数据库
-mysql驱动
 
-jpa
+1)mysql驱动,添加以下依赖
+```
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+
+2)mysql配置
+```
+
+#mysql数据源url
+spring.datasource.url=jdbc:mysql://localhost:3306/blog?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+#用户
+spring.datasource.username=root
+#密码
+spring.datasource.password=root
+#mysql驱动
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+```
+
+
+jpa<br>
+添加依赖
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+```
 
 mybatis
 

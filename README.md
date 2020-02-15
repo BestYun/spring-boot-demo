@@ -374,7 +374,7 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
 
-jpa<br>
+Jpa<br>
 添加依赖
 ```
 <dependency>
@@ -383,13 +383,151 @@ jpa<br>
 </dependency>
 ```
 
+Jpa mysql 数据库配置
+```
+
+#mysql数据源url
+spring.datasource.url=jdbc:mysql://localhost:3306/mp?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+#用户
+spring.datasource.username=root
+#密码
+spring.datasource.password=root
+#mysql驱动
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+
 mybatis
 
 mybatis-plus
+```
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-boot-starter</artifactId>
+    <version>3.3.1</version>
+</dependency>
+```
+
+mybatis-plus mysql 数据库配置
+```
+#mysql数据源url
+spring.datasource.url=jdbc:mysql://localhost:3306/mp?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+#用户
+spring.datasource.username=root
+#密码
+spring.datasource.password=root
+#mysql驱动
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+
+1)创建mapper包
+2)添加扫描@MapperScan("com.readchen.springbootmybatisplus.mapper")
+```
+@SpringBootApplication
+@MapperScan("com.readchen.springbootmybatisplus.mapper")
+public class SpringBootMybatisPlusApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootMybatisPlusApplication.class, args);
+	}
+
+}
+```
+
+3)创建User模型
+```
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class User {
+    private Long id;
+    private String name;
+    private Integer age;
+    private String email;
+    private Long managerId;
+    private LocalDateTime createTime;
+}
+```
+
+4)在mapper包创建User mapper
+```
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.readchen.springbootmybatisplus.entity.User;
+
+public interface UserMapper extends BaseMapper<User> {
+}
+```
+
+mybatis-plus查询<br>
+1.查询
+```
+@Autowired
+private UserMapper userMapper;
+
+List<User> users = userMapper.selectList(null);
+User user = userMapper.selectById(userId);
+
+//WHERE name = ? AND age = ?
+Map<String,Object> cloums = new HashMap<>();
+cloums.put("name","yun");
+cloums.put("age",18);
+List<User> users = userMapper.selectByMap(cloums);
+
+
+
+//条件构造器  where age > 10
+QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+queryWrapper.gt("age","10");
+List<User> users = userMapper.selectList(queryWrapper);
+
+
+
+//条件构造器 WHERE (age > ? AND name LIKE ? AND email IS NOT NULL)
+QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+queryWrapper.gt("age","10").like("name","y").isNotNull("email");
+List<User> users = userMapper.selectList(queryWrapper);
+
+
+//条件构造器 WHERE (name LIKE ? OR name LIKE ?) ORDER BY age ASC
+QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+queryWrapper.like("name","y").or().like("name","王").orderByAsc("age");
+List<User> users = userMapper.selectList(queryWrapper);
+
+
+
+//子查询 WHERE (age > ? AND manager_id IN (select manager_id from user where name like '%王' )) 
+QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+queryWrapper.apply("age > {0}",10).
+    inSql("manager_id","select manager_id from user where name like '%王%' ");
+
+List<User> users = userMapper.selectList(queryWrapper);
+
+
+//WHERE (name LIKE ? AND (age > ? OR email IS NOT NULL))
+QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+queryWrapper.like("name","%王%").
+        and(qw->qw.gt("age",10).or().isNotNull("email"));
+
+List<User> users = userMapper.selectList(queryWrapper);
+
+
+//WHERE (name LIKE ? OR (age > ? AND email IS NOT NULL))
+QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+queryWrapper.like("name","%王%").
+    or(qw->qw.gt("age",40).isNotNull("email"));
+
+List<User> users = userMapper.selectList(queryWrapper);
+
+```
+
+
 
 连接池
 
 配置多数据源
+
+
 
 ## 缓存
 redis

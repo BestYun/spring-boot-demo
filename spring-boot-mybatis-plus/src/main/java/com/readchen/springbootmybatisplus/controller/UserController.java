@@ -93,6 +93,34 @@ public class UserController {
         return JsonResult.success(users);
     }
 
+    @GetMapping("test7")
+    JsonResult getUserByQuery7(){
+//      WHERE (age > ? AND email IS NOT NULL) AND name LIKE ?
+//        nested 不是以and或者or开头作为条件
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+        queryWrapper.nested(qw->qw.gt("age",20).isNotNull("email")).
+                like("name","%王%");
+
+        List<User> users = userMapper.selectList(queryWrapper);
+        return JsonResult.success(users);
+    }
+
+    @GetMapping("test8")
+    JsonResult getUserByQuery8(){
+//      WHERE name=? AND age=?
+//      实体作为条件参数
+
+        User user = new User();
+        user.setName("yun");
+        user.setAge(18);
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>(user);
+
+        List<User> users = userMapper.selectList(queryWrapper);
+        return JsonResult.success(users);
+    }
+
+
 
 
     @PostMapping("user")

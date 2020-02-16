@@ -1,6 +1,9 @@
 package com.readchen.springbootmybatisplus.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.readchen.springbootmybatisplus.entity.User;
 import com.readchen.springbootmybatisplus.mapper.UserMapper;
 import com.readchen.springbootmybatisplus.vo.JsonResult;
@@ -120,8 +123,70 @@ public class UserController {
         return JsonResult.success(users);
     }
 
+    @GetMapping("test9")
+    JsonResult getUserByQuery9(){
+//WHERE (name = ?)
+//        lambda表达式查询
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
+        queryWrapper.eq(User::getName,"yun").or().eq(User::getAge,18);
+
+        List<User> users = userMapper.selectList(queryWrapper);
+        return JsonResult.success(users);
+    }
 
 
+
+    @GetMapping("test10")
+    JsonResult getUserByQuery10(){
+        //自定义sql
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
+        queryWrapper.eq(User::getName,"yun").or().eq(User::getAge,18);
+
+        List<User> users = userMapper.getUserAll(queryWrapper);
+        return JsonResult.success(users);
+    }
+
+
+    @GetMapping("test11")
+    JsonResult getUserByQuery11(){
+        //自定义sql
+
+        List<User> users = userMapper.getUserAll2();
+        return JsonResult.success(users);
+    }
+
+
+
+    @GetMapping("test12")
+    JsonResult getUserByQuery12(){
+        //自定义sql
+
+        List<User> users = userMapper.getUserByName("yun");
+        return JsonResult.success(users);
+    }
+
+
+    @GetMapping("page")
+    JsonResult getUserByPage(){
+        //分页
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>();
+        lambdaQueryWrapper.gt(User::getAge,10);
+
+        Page<User> page = new Page<User>(1,5);
+        IPage<User> iPage = userMapper.selectPage(page,lambdaQueryWrapper);
+        Map<String,Object> map = new HashMap<String,Object>();
+//        当前页
+        map.put("index",iPage.getCurrent());
+//        总页数
+        map.put("pageSize",iPage.getPages());
+//        记录
+        map.put("users",iPage.getRecords());
+//        总记录数
+        map.put("total",iPage.getTotal());
+
+        return JsonResult.success(map);
+    }
 
     @PostMapping("user")
     JsonResult addUser(){

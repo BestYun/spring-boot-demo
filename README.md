@@ -539,6 +539,73 @@ List<User> users = userMapper.selectList(queryWrapper);
 
 
 
+//WHERE (name = ?)
+//lambda表达式查询
+LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
+queryWrapper.eq(User::getName,"yun");
+
+List<User> users = userMapper.selectList(queryWrapper);
+
+
+通过注解自定义sql
+
+public interface UserMapper extends BaseMapper<User> {
+
+    @Select("select * from user ${ew.customSqlSegment}")
+    List<User> getUserAll(@Param(Constants.WRAPPER) Wrapper wrapper);
+
+    @Select("select * from user ")
+    List<User> getUserAll2();
+
+
+    @Select("select * from user where name = '${name}' ")
+    List<User> getUserByName(String name);
+
+}
+
+
+@Select("select * from user where name = '${name}' ")
+List<User> getUserByName(String name);
+
+LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
+        queryWrapper.eq(User::getName,"yun").or().eq(User::getAge,18);
+List<User> users = userMapper.getUserAll(queryWrapper);
+
+List<User> users = userMapper.getUserAll2();
+
+List<User> users = userMapper.getUserByName("yun");
+
+```
+
+分页
+```
+配置分页插件
+@Configuration
+public class MyBatisPlusConfig {
+
+    @Bean
+    PaginationInterceptor paginationInterceptor(){
+        return new PaginationInterceptor();
+    }
+}
+
+
+LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>();
+lambdaQueryWrapper.gt(User::getAge,10);
+
+Page<User> page = new Page<User>(1,5);
+IPage<User> iPage = userMapper.selectPage(page,lambdaQueryWrapper);
+Map<String,Object> map = new HashMap<String,Object>();
+//        当前页
+map.put("index",iPage.getCurrent());
+//        总页数
+map.put("pageSize",iPage.getPages());
+//        记录
+map.put("users",iPage.getRecords());
+//        总记录数
+map.put("total",iPage.getTotal());
+
+
 ```
 
 

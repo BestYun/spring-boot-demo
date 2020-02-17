@@ -608,6 +608,25 @@ map.put("total",iPage.getTotal());
 
 ```
 
+更新
+```
+User user = new User();
+user.setId(1228548876865130498L);
+user.setName("yun update");
+//通过id
+int rows = userMapper.updateById(user);
+
+
+UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<User>();
+userUpdateWrapper.eq("age",18);
+User user = new User();
+user.setName("yun update222");
+user.setEmail("yunupdate@163.com");
+int rows = userMapper.update(user,userUpdateWrapper);
+
+
+```
+
 
 
 连接池

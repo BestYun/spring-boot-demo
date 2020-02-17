@@ -2,6 +2,7 @@ package com.readchen.springbootmybatisplus.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.readchen.springbootmybatisplus.entity.User;
@@ -186,6 +187,36 @@ public class UserController {
         map.put("total",iPage.getTotal());
 
         return JsonResult.success(map);
+    }
+
+    @GetMapping("/update1")
+    JsonResult updateUser(){
+        User user = new User();
+        user.setId(1228548876865130498L);
+        user.setName("yun update");
+        int rows = userMapper.updateById(user);
+        if(rows>0){
+            User user1 = userMapper.selectById(1228548876865130498L);
+            return JsonResult.success(user1);
+        }
+        return JsonResult.fail(1,"更新失败");
+    }
+
+
+    @GetMapping("/update2")
+    JsonResult updateUser2(){
+
+        UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<User>();
+        userUpdateWrapper.eq("age",18);
+        User user = new User();
+        user.setName("yun update222");
+        user.setEmail("yunupdate@163.com");
+        int rows = userMapper.update(user,userUpdateWrapper);
+        if(rows>0){
+            User user1 = userMapper.selectById(1228548876865130498L);
+            return JsonResult.success(user1);
+        }
+        return JsonResult.fail(1,"更新失败");
     }
 
     @PostMapping("user")

@@ -639,8 +639,13 @@ boolean update = new LambdaUpdateChainWrapper<User>(userMapper).eq(User::getAge,
 
 
 数据库连接池<br>
-spring-boot 2.0以上版本默认使用HikariCP
+spring-boot 2.0以上版本默认使用HikariCP<br>
 
+看到有以下两行日志说明配置成功了
+```
+com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+```
 ```
 #mysql数据源url
 spring.datasource.url=jdbc:mysql://localhost:3306/mp?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true

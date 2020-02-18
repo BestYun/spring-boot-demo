@@ -683,8 +683,52 @@ spring.datasource.hikari.connection-test-query=SELECT 1
 
 
 
-## 缓存
-redis
+## 缓存 redis
+
+方案一:Spring Data Redis
+```
+添加主要依赖
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+@Autowired
+StringRedisTemplate stringRedisTemplate;
+
+stringRedisTemplate.opsForValue().set("users","name:yun");
+
+stringRedisTemplate.opsForValue().get("users")
+
+```
+
+
+方案二:Spring Cache
+```
+添加主要依赖
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+@Autowired
+StringRedisTemplate stringRedisTemplate;
+
+stringRedisTemplate.opsForValue().set("users","name:yun");
+
+stringRedisTemplate.opsForValue().get("users")
+
+```
+
+方案三：直接使用Jedis
+```
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <version>2.9.0</version>
+</dependency>
+
+```
 
 ## 日志
 

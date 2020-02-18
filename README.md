@@ -625,13 +625,56 @@ user.setEmail("yunupdate@163.com");
 int rows = userMapper.update(user,userUpdateWrapper);
 
 
+//不通过实体做更新
+UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<User>();
+userUpdateWrapper.eq("age",18).set("name","yun set");
+int rows = userMapper.update(null,userUpdateWrapper);
+
+//Lambda 链式更新
+boolean update = new LambdaUpdateChainWrapper<User>(userMapper).eq(User::getAge,18).
+        set(User::getAge,30).set(User::getName,"yun").update();
+
 ```
 
 
 
-连接池
+数据库连接池<br>
+spring-boot 2.0以上版本默认使用HikariCP
 
-配置多数据源
+```
+#mysql数据源url
+spring.datasource.url=jdbc:mysql://localhost:3306/mp?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+#用户
+spring.datasource.username=root
+#密码
+spring.datasource.password=root
+#mysql驱动
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#打印sql
+spring.jpa.show-sql=true
+
+
+##  Hikari 连接池配置 ------ 详细配置请访问：https://github.com/brettwooldridge/HikariCP
+spring.datasource.type=com.zaxxer.hikari.HikariDataSource
+## 最小空闲连接数量
+spring.datasource.hikari.minimum-idle=5
+## 空闲连接存活最大时间，默认600000（10分钟）
+spring.datasource.hikari.idle-timeout=180000
+## 连接池最大连接数，默认是10
+spring.datasource.hikari.maximum-pool-size=10
+## 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+spring.datasource.hikari.auto-commit=true
+## 连接池母子
+spring.datasource.hikari.pool-name=MyHikariCP
+## 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+spring.datasource.hikari.max-lifetime=1800000
+## 数据库连接超时时间,默认30秒，即30000
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.connection-test-query=SELECT 1
+
+
+```
+
 
 
 

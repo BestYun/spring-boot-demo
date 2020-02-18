@@ -1,14 +1,12 @@
-package com.readchen.springbootmybatisplus.controller;
+package com.readchen.springbootHikariCP.controller;
+
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.readchen.springbootmybatisplus.entity.User;
-import com.readchen.springbootmybatisplus.mapper.UserMapper;
-import com.readchen.springbootmybatisplus.vo.JsonResult;
+import com.readchen.springbootHikariCP.entity.User;
+import com.readchen.springbootHikariCP.mapper.UserMapper;
+import com.readchen.springbootHikariCP.vo.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -167,27 +165,7 @@ public class UserController {
     }
 
 
-    @GetMapping("page")
-    JsonResult getUserByPage(){
-        //分页
 
-        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>();
-        lambdaQueryWrapper.gt(User::getAge,10);
-
-        Page<User> page = new Page<User>(1,5);
-        IPage<User> iPage = userMapper.selectPage(page,lambdaQueryWrapper);
-        Map<String,Object> map = new HashMap<String,Object>();
-//        当前页
-        map.put("index",iPage.getCurrent());
-//        总页数
-        map.put("pageSize",iPage.getPages());
-//        记录
-        map.put("users",iPage.getRecords());
-//        总记录数
-        map.put("total",iPage.getTotal());
-
-        return JsonResult.success(map);
-    }
 
     @GetMapping("/update1")
     JsonResult updateUser(){
@@ -203,35 +181,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/update2")
-    JsonResult updateUser2(){
 
-        UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<User>();
-        userUpdateWrapper.eq("age",18);
-        User user = new User();
-        user.setName("yun update222");
-        user.setEmail("yunupdate@163.com");
-        int rows = userMapper.update(user,userUpdateWrapper);
-        if(rows>0){
-            User user1 = userMapper.selectById(1228548876865130498L);
-            return JsonResult.success(user1);
-        }
-        return JsonResult.fail(1,"更新失败");
-    }
-
-
-    @GetMapping("/update3")
-    JsonResult updateUser3(){
-//不通过实体做更新
-        UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<User>();
-        userUpdateWrapper.eq("age",18).set("name","yun set");
-        int rows = userMapper.update(null,userUpdateWrapper);
-        if(rows>0){
-            User user1 = userMapper.selectById(1228548876865130498L);
-            return JsonResult.success(user1);
-        }
-        return JsonResult.fail(1,"更新失败");
-    }
 
 
     @GetMapping("/update4")

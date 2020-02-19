@@ -33,7 +33,13 @@ public class UserController {
 
     @GetMapping("users")
     JsonResult getUsers(){
-        List<User> users = userMapper.selectList(null);
+
+        List<User> users = (List<User>) redisService.get("users");
+        if(users==null){
+            users = userMapper.selectList(null);
+            redisService.set("users",users);
+        }
+
         return JsonResult.success(users);
     }
 
@@ -67,12 +73,14 @@ public class UserController {
 
     @GetMapping("/update1")
     JsonResult updateUser(){
+
         User user = new User();
         user.setId(1228548876865130498L);
         user.setName("yun update");
         int rows = userMapper.updateById(user);
         if(rows>0){
             User user1 = userMapper.selectById(1228548876865130498L);
+            redisService.set(user.getId()+"",user1);
             return JsonResult.success(user1);
         }
         return JsonResult.fail(1,"更新失败");

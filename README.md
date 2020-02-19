@@ -783,6 +783,19 @@ List<User> users = (List<User>) redisService.get("users");
 ```
 
 ## 日志
+spring boot 默认使用Logback
+
+
+```
+使用Lombok的注解@Slf4j
+log.info("LombokLogController");
+
+或者
+private Logger logger = LoggerFactory.getLogger(this.getClass());
+logger.debug("url / index");
+
+```
+
 
 ## 消息队列
 

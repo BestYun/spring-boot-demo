@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class UserController {
@@ -60,6 +61,7 @@ public class UserController {
         return JsonResult.success(user);
     }
 
+
     @GetMapping("redis")
     JsonResult redis1(){
 //        stringRedisTemplate.opsForValue().set("users","name:yun");
@@ -69,6 +71,22 @@ public class UserController {
         return JsonResult.success(redisService.get("user"));
     }
 
+
+    @GetMapping("redis2")
+    JsonResult redisTest2(){
+        Long  userId = 1228548876865130498l;
+
+
+        User user = (User) redisService.get(userId.toString());
+        if (user==null){
+            user = userMapper.selectById(userId);
+//            设置过期时间
+            redisService.set(""+userId,user,10L, TimeUnit.SECONDS);
+
+        }
+
+        return JsonResult.success(user);
+    }
 
 
     @GetMapping("/update1")

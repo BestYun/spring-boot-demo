@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWra
 
 import com.readchen.springbootredis.entity.User;
 import com.readchen.springbootredis.mapper.UserMapper;
+import com.readchen.springbootredis.service.RedisService;
 import com.readchen.springbootredis.vo.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -25,6 +26,9 @@ public class UserController {
     private UserMapper userMapper;
 
     @Autowired
+    RedisService redisService;
+
+    @Autowired
     StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("users")
@@ -35,15 +39,28 @@ public class UserController {
 
     @GetMapping("user/{userID}")
     JsonResult getUserByID(@PathVariable("userID") long userId){
-        User user = userMapper.selectById(userId);
+        if(userId<1000000){
+            userId = 1228548876865130498l;
+        }
+
+
+        User user = (User) redisService.get(""+userId);
+        if (user==null){
+            user = userMapper.selectById(userId);
+            redisService.set(""+userId,user);
+
+        }
+
         return JsonResult.success(user);
     }
 
     @GetMapping("redis")
     JsonResult redis1(){
-        stringRedisTemplate.opsForValue().set("users","name:yun");
+//        stringRedisTemplate.opsForValue().set("users","name:yun");
 
-        return JsonResult.success(stringRedisTemplate.opsForValue().get("users"));
+        redisService.set("user","{'name':'yun'}");
+
+        return JsonResult.success(redisService.get("user"));
     }
 
 

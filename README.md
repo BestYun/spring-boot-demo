@@ -807,7 +807,7 @@ logger.debug("url / index");
 ## 统一异常处理
 
 ## 文档
-Swagger2
+Swagger2  访问http://127.0.0.1:8080/swagger-ui.html
 ```
 <dependency>
     <groupId>io.springfox</groupId>
@@ -890,6 +890,32 @@ Swagger2
 •　readOnly：如果值为true，字段就是只读的。
 •　allowEmptyValue：如果为true，就允许为空值。
 
+
+```
+
+
+ApiDoc
+
+```
+<dependency>
+  <groupId>com.github.terran4j</groupId>
+  <artifactId>terran4j-commons-api2doc</artifactId>
+  <version>1.0.2</version>
+</dependency>
+
+```
+
+```
+使用
+（1）加入ApiDoc依赖。
+（2）在启动类上加入@EnableApi2Doc注解启用ApiDoc。
+（3）构建ApiDoc文档和实体。
+
+@ApiComment注解
+•　value：说明。
+•　seeField：采用指定字段上的说明信息。
+•　seeClass：采用指定类的同名字段上的说明信息。
+•　sample：示例值。
 
 ```
 

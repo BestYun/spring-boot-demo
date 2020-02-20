@@ -9000,3 +9000,5 @@ Unconditional classes:
 2020-02-19 14:00:34.296 DEBUG 76822 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Using 'text/plain', given [*/*] and supported [text/plain, */*, text/plain, */*, application/json, application/*+json, application/json, application/*+json]
 2020-02-19 14:00:34.296 DEBUG 76822 --- [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Writing ["log index"]
 2020-02-19 14:00:34.298 DEBUG 76822 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2020-02-19 20:43:42.325 DEBUG 76822 --- [SpringContextShutdownHook] ConfigServletWebServerApplicationContext : Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@1b7bff5a, started on Wed Feb 19 14:00:21 CST 2020
+2020-02-19 20:43:42.418  INFO 76822 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'

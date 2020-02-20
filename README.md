@@ -799,11 +799,100 @@ logger.debug("url / index");
 
 ## 消息队列
 
-## 拦截器、过滤器、定时器
+## 拦截器、过滤器、
+
+
+## 定时器
 
 ## 统一异常处理
 
 ## 文档
+Swagger2
+```
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.9.2</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>2.9.2</version>
+</dependency>
+
+```
+
+```
+
+1. Api@Api用在接口文档资源类上，用于标记当前类为Swagger的文档资源。
+其中含有几个常用属性，分别说明如下。
+•　value：定义当前接口文档的名称。
+•　description：用于定义当前接口文档的介绍。
+•　tag：可以使用多个名称来定义文档，但若同时存在tag属性和value属性，则value属性会失效。
+•　hidden：如果值为true，就会隐藏文档。
+
+2. ApiOperation
+@ApiOperation用在接口文档的方法上，主要用来注解接口。
+其中包含几个常用属性，分别说明如下。
+
+•　value：对API的简短描述。
+•　note：API的有关细节描述。
+•　response：接口的返回类型（注意：这里不是返回实际响应，而是返回对象的实际结果）。
+•　hidden：如果值为true，就会在文档中隐藏。
+
+3. ApiResponse、ApiResponses
+@ApiResponses和@ApiResponse二者配合使用返回HTTP状态码。
+@ApiResponses的value值是@ApiResponse的集合，多个@ApiResponse用逗号分隔。
+其中，@ApiResponse包含的属性如下。
+
+•　code：HTTP状态码。
+•　message：HTTP状态信息。
+•　responseHeaders：HTTP响应头。
+
+
+4. ApiParam
+@ApiParam用于方法的参数，其中包含以下几个常用属性。
+•　name：参数的名称。
+•　value：参数值。
+•　required：如果值为true，就是必传字段。
+•　defaultValue：参数的默认值。
+•　type：参数的类型。
+
+
+5. ApiImplicitParam、ApiImplicitParams二者配合使用在API方法上，
+@ApiImplicitParams的子集是@ApiImplicitParam注解，
+其中@ApiImplicitParam注解包含以下几个参数。
+•　name：参数的名称。
+•　value：参数值。
+•　required：如果值为true，就是必传字段。
+•　defaultValue：参数的默认值。
+•　dataType：数据的类型。
+•　hidden：如果值为true，就隐藏这个参数。
+•　allowMultiple：是否允许重复。
+
+6. ResponseHeaderAPI文档的响应头，如果需要设置响应头，就将@ResponseHeader设置到@ApiResponse的responseHeaders参数中。@ResponseHeader提供了以下几个参数。
+•　name：响应头名称。
+•　description：响应头备注。
+
+7. ApiModel设置API响应的实体类，用作API返回对象。
+@ApiModel提供了以下几个参数。
+•　value：实体类名称。
+•　description：实体类描述。
+•　subTypes：子类的类型。
+
+8. ApiModelProperty设置API响应实体的属性，其中包含以下几个参数。
+•　name：属性名称。
+•　value：属性值。
+•　notes：属性的注释。
+•　dataType：数据的类型。
+•　required：如果值为true，就必须传入这个字段。
+•　hidden：如果值为true，就隐藏这个字段。
+•　readOnly：如果值为true，字段就是只读的。
+•　allowEmptyValue：如果为true，就允许为空值。
+
+
+```
+
 
 
 ## 部署

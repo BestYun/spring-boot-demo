@@ -12,4 +12,9 @@ public class UserController {
         return "users";
     }
 
+    @GetMapping("/error")
+    String error(){
+        return "error page";
+    }
+
 }

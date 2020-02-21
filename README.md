@@ -864,6 +864,77 @@ public class SpringBootFilterApplication implements WebMvcConfigurer {
 	}
 }
 
+```
+
+### 过滤器
+```
+•　init方法：在容器中创建当前过滤器的时候自动调用这个方法。
+•　destory方法：在容器中销毁当前过滤器的时候自动调用这个方法。
+•　doFilter方法：这个方法有3个参数，分别是ServletRequest、ServletResponse和FilterChain。
+可以从参数中获取HttpServletRequest和HttpServletResponse对象进行相应的处理操作。
+
+
+package com.readchen.springbootfilter;
+
+import lombok.extern.log4j.Log4j2;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
+
+@Log4j2
+public class MyFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        boolean doFilter = true;
+        HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) servletResponse);
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+
+        log.info(request.getRequestURI());
+
+        if (request.getRequestURI().startsWith("/users")||request.getRequestURI().startsWith("/error")){
+
+//            符合条件就继续处理
+            filterChain.doFilter(servletRequest,servletResponse);
+        }else{
+//            不符合条件 处理
+            log.info("不符合条件 处理"+request.getRequestURI());
+            wrapper.sendRedirect("/error");
+        }
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        log.info("在服务启动时初始化");
+    }
+
+    @Override
+    public void destroy() {
+        log.info("销毁");
+    }
+}
+
+注册过滤器
+
+@SpringBootApplication
+public class SpringBootFilterApplication implements WebMvcConfigurer {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootFilterApplication.class, args);
+	}
+
+	@Bean
+	public FilterRegistrationBean filterRegist(){
+		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+		filterRegistrationBean.setFilter(new MyFilter());
+		filterRegistrationBean.addUrlPatterns("/*");
+		return filterRegistrationBean;
+	}
+}
+
 
 ```
 

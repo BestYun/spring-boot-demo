@@ -3,9 +3,12 @@ package com.readchen.springbootfilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 
 @SpringBootApplication
@@ -29,5 +32,13 @@ public class SpringBootFilterApplication implements WebMvcConfigurer {
 		//添加不拦截路径
 		registration.excludePathPatterns("/","/login","/error","/static/**","/logout");
 
+	}
+
+	@Bean
+	public FilterRegistrationBean filterRegist(){
+		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+		filterRegistrationBean.setFilter(new MyFilter());
+		filterRegistrationBean.addUrlPatterns("/*");
+		return filterRegistrationBean;
 	}
 }

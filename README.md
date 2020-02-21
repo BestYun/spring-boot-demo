@@ -939,9 +939,9 @@ public class SpringBootFilterApplication implements WebMvcConfigurer {
 ```
 
 
-## 定时器
+## 定时
 
-## 统一异常处理
+
 
 ## 文档
 Swagger2  访问http://127.0.0.1:8080/swagger-ui.html
@@ -1059,4 +1059,31 @@ ApiDoc
 
 
 ## 部署
+到pom.xml同级目录下运行以下命令
+
+```
+mvn clean package
+```
+
+打包后生成的jar包在target目录下
+
+```
+执行命令后即可正确启动Spring Boot应用程序。
+
+java -jar spring-boot-log-0.0.1-SNAPSHOT.jar 
+
+
+当然，Spring Boot应用程序JAR形式启动可以指定一些参数，分别说明如下。
+
+指定端口：java -jar xxx.jar --server.port=8888。
+
+内存参数：java -Xms800m -Xmx800m -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxNewSize=512m -jar xxx.jar。
+
+配置文件：java -jar xxx.jar -Dspring.profiles.active=dev。
+
+后台运行：nohup java -jar xxx.jar &。
+
+
+```
+
 

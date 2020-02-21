@@ -801,6 +801,72 @@ logger.debug("url / index");
 
 ## 拦截器、过滤器、
 
+### 拦截器
+
+```
+preHandle　在业务处理器处理请求之前被调用，返回值是boolean值，如果返回true，就进行下一步操作；
+若返回false，则证明不符合拦截条件。
+在失败的时候不会包含任何响应，此时需要调用对应的response返回对应响应。
+
+•　postHandle　在业务处理器处理请求执行完成后、生成视图前执行。
+这个方法可以通过方法参数ModelAndView对视图进行处理，当然ModelAndView也可以设置为null。
+
+
+•　afterCompletion　
+在DispatcherServlet完全处理请求后被调用，通常用于记录消耗时间，也可以进行一些资源处理操作。
+
+
+
+@Component
+@Log4j2
+public class MyInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("preHandle");
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        log.info("postHandle");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        log.info("afterCompletion");
+    }
+}
+
+注册拦截器
+
+@SpringBootApplication
+public class SpringBootFilterApplication implements WebMvcConfigurer {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootFilterApplication.class, args);
+	}
+
+
+
+	@Autowired
+	MyInterceptor myInterceptor;
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		//	注册拦截器
+		InterceptorRegistration registration = registry.addInterceptor(myInterceptor);
+		//所有路径都被拦截
+		registration.addPathPatterns("/**");
+		//添加不拦截路径
+		registration.excludePathPatterns("/","/login","/error","/static/**","/logout");
+
+	}
+}
+
+
+```
+
 
 ## 定时器
 

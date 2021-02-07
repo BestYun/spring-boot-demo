@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.readchen.springbootmybatisplus.entity.User;
+import com.readchen.springbootmybatisplus.entity.UserPost;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -20,5 +21,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select * from user where name = '${name}' ")
     List<User> getUserByName(String name);
+
+    @Select("select")
+    List<UserPost> getPostsByUid();
 
 }

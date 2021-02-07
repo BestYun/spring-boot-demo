@@ -253,7 +253,6 @@ public class UserController {
         user.setAge(18);
         user.setName("yun");
         user.setEmail("yun@163.com");
-        user.setManagerId(1088248166370832385L);
 
         int rows = userMapper.insert(user);
         if(rows>0){

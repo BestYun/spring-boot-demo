@@ -23,8 +23,5 @@ public class Article {
     @Column(name = "user_id")
     private int userID;
 
-//    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-//    private User user;
-
 
 }

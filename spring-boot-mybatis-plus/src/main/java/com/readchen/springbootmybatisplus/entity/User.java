@@ -12,11 +12,5 @@ public class User {
     private String name;
     private Integer age;
     private String email;
-    private Long managerId;
-    private LocalDateTime createTime;
-//    排除非表字段
-    @TableField(exist = false)
-//    排除json输出
-    @JsonIgnore
-    private String info;
+
 }
